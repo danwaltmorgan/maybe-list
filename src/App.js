@@ -1,44 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.css'
 import './media.css'
 
 let selected;
+let random = null;
 
 function App() {
 
-  const [list, setList] = useState([])
+  const [list, setList] = useState(
+    JSON.parse(localStorage.getItem('movies')) || [])
   const [text, setText] = useState("")
-  // const [selected, setSelected] = useState(undefined)
 
 
-  const removeSelected = () => {
+
+  useEffect(() => {
+    localStorage.setItem('movies', JSON.stringify(list));
+  }, [list])
+
+  const removeSelected = () => { //removes yellow selected
     if (selected !== undefined) {
       selected.classList.remove("selected")
+      selected.classList.remove("finalSelect")
     }
   }
 
+
   const handleRandom = () => {
-    if (list.length === 0) return
-    let randomNum = Math.floor(Math.random() * list.length)
-    removeSelected()
-    selected = document.getElementById(randomNum)
-    console.log(selected)
-    selected.classList.add("selected")
+    random = null
+    if (list.length <= 1) {
+      alert("Enter more than one option!")
+      return
+    }
+    let i = 0
+    const time = setInterval(() => { //runs through 10 iterations of random choice without repeating the last selection
+      i++
+      let randomNum = Math.floor(Math.random() * list.length)
+
+      if (randomNum === random) {
+        while (randomNum === random) {
+          randomNum = Math.floor(Math.random() * list.length)
+        }
+      }
+      random = randomNum
+
+      removeSelected()
+      selected = document.getElementById(randomNum)
+      selected.classList.add("selected")
+      if (i > 10) {
+        clearInterval(time)
+        selected.classList.add("finalSelect")
+      }
+    }, 150)
   }
 
   const handleChange = (e) => {
     setText(e.target.value)
   }
 
-  const handleSubmit = (event) => {
-    // event.preventDefault()
-    console.log(selected)
+  const handleSubmit = () => {
     removeSelected()
     if (text !== "") {
       setList([...list, text])
       setText("")
     }
-    // e.preventDefault()
   }
 
   const handleKeyPress = (event) => {
@@ -52,6 +76,7 @@ function App() {
   }
 
   const deleteItem = (index) => {
+    removeSelected()
     let newList = [...list]
     if (index !== -1) {
       newList.splice(index, 1)
@@ -76,7 +101,7 @@ function App() {
     <div className="container">
       <h1>Maybe List</h1>
       <input
-        placeholder="Enter a Movie"
+        placeholder="Enter an Option"
         className="movie-input"
         value={text}
         onChange={handleChange}
@@ -86,7 +111,8 @@ function App() {
           type="submit"
           className="submit-btn"
           onClick={handleSubmit}
-          value="Add"
+          value="Add +"
+          id="add-btn"
       />
       <div className="list-container">
           {items}
@@ -94,6 +120,7 @@ function App() {
       <div className="btn-container">
         <button
           onClick={handleRandom}
+          id="random-btn"
         >
           Select Random
         </button>
