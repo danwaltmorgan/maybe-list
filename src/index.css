@@ -30,7 +30,7 @@
 .delete {
   color: red;
   font-family: monospace;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 .list-container {
@@ -41,4 +41,11 @@
 
 .selected {
   background-color: yellow;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
 }

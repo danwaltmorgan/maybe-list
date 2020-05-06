@@ -1,0 +1,21 @@
+@media screen and (max-width: 450px) {
+  .movie-input {
+    width: 100%;
+    padding: 10px 2px;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+
+  .list-container {
+    width: 100%;
+  }
+
+  .btn-container {
+    width: 100%;
+  }
+  button {
+    width: 100%;
+  }
+}

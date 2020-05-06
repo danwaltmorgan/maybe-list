@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './index.css'
+import './media.css'
 
 let selected;
 
@@ -90,15 +91,17 @@ function App() {
       <div className="list-container">
           {items}
       </div>
-      <button
-        onClick={handleRandom}
+      <div className="btn-container">
+        <button
+          onClick={handleRandom}
         >
-        Select Random
-      </button>
-      <button
-        id="clear-all-btn"
-        onClick={handleClearAll}
-        >Clear All</button>
+          Select Random
+        </button>
+        <button
+            id="clear-all-btn"
+            onClick={handleClearAll}
+            >Clear All</button>
+      </div>
     </div>
   )
 
