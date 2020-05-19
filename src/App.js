@@ -46,7 +46,7 @@ function App() {
           randomNum = Math.floor(Math.random() * list.length)
         }
       }
-      random = randomNum
+      random = randomNum // sets random to the previous random number for the next cycle
 
       removeSelected()
       selected = document.getElementById(randomNum)
@@ -80,6 +80,9 @@ function App() {
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       handleSubmit()
+    }
+    if (event.ctrlKey) { //Will trigger random selection when you press CTRL and Enter
+      handleRandom()
     }
 
   }
