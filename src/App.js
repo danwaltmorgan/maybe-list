@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import './index.css'
 import './media.css'
+import click from './audio/button-50.wav'
+import beep from './audio/button-37.wav'
 
 let selected;
 let random = null;
+let time;
 
 function App() {
 
   const [list, setList] = useState(
-    JSON.parse(localStorage.getItem('movies')) || [])
+    JSON.parse(localStorage.getItem('Options List')) || [])
   const [text, setText] = useState("")
 
 
 
   useEffect(() => {
-    localStorage.setItem('movies', JSON.stringify(list));
+    localStorage.setItem('Options List', JSON.stringify(list));
   }, [list])
 
   const removeSelected = () => { //removes yellow selected
-    if (selected !== undefined) {
+    if (selected !== undefined  ) {
       selected.classList.remove("selected")
       selected.classList.remove("finalSelect")
     }
@@ -32,10 +35,12 @@ function App() {
       return
     }
     let i = 0
-    const time = setInterval(() => { //runs through 10 iterations of random choice without repeating the last selection
+    //runs through 10 iterations of random choice without repeating the last selection
+    time = setInterval(() => {
       i++
       let randomNum = Math.floor(Math.random() * list.length)
 
+      // makes sure that the last number isn't the same as current
       if (randomNum === random) {
         while (randomNum === random) {
           randomNum = Math.floor(Math.random() * list.length)
@@ -46,11 +51,18 @@ function App() {
       removeSelected()
       selected = document.getElementById(randomNum)
       selected.classList.add("selected")
-      if (i > 10) {
+      handleAudio("click")
+
+      if (i > 15) { //number of iterations through the clicking
         clearInterval(time)
+        handleAudio('beep')
         selected.classList.add("finalSelect")
       }
-    }, 150)
+    }, 100)
+  }
+
+  const handleClearInteraval = (interval) => {
+    clearInterval(interval)
   }
 
   const handleChange = (e) => {
@@ -69,10 +81,16 @@ function App() {
     if (event.key === "Enter") {
       handleSubmit()
     }
+
   }
 
   const handleClearAll = () => {
-    setList([])
+    if (list.length === 0) {
+      alert("Nothing to clear!")
+    } else {
+      clearInterval(time)
+      setList([])
+    }
   }
 
   const deleteItem = (index) => {
@@ -97,8 +115,19 @@ function App() {
     </div>
   })
 
+  const handleAudio = (id) => {
+    let audio = document.getElementById(id)
+    audio.play()
+    // audio.pause()
+    audio.currentTime = 0
+    console.log(audio.play())
+  }
+
   return (
     <div className="container">
+      <audio id="click" src={click} preload="auto"></audio>
+      <audio id="beep" src={beep} preload="auto"></audio>
+
       <h1>Maybe List</h1>
       <input
         placeholder="Enter an Option"
@@ -129,9 +158,9 @@ function App() {
             onClick={handleClearAll}
             >Clear All</button>
       </div>
+
     </div>
   )
-
 }
 
 export default App

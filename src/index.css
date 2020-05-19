@@ -19,6 +19,7 @@ h1 {
 
 .movie-input {
   padding: 5px;
+
   width: 30%;
   line-height: 2;
   font-size: 1.5em;
@@ -57,7 +58,7 @@ h1 {
 .list-container {
   /* border: 1px solid black; */
   width: 30%;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .selected {
